@@ -162,8 +162,10 @@ function buyTicket() {
         email: email
 
     };
+    //sends a post-request to the server with "/saveTicket", sends back newOrder to the server
     $.post("/saveTicket", newOrder, function (tickets) {
 
+        //clears all input fields
         fetchTickets(tickets);
         $("#first_name").val("");
         $("#surname").val("");
@@ -177,6 +179,7 @@ function buyTicket() {
 
 }
 
+//gets the tickets from the server
 function fetchTickets() {
     $.get("/fetchTickets", function (tickets) {
         showList(tickets);
@@ -206,7 +209,7 @@ function showList(tickets) {
     ticketsDisplay.append(out);
 }
 
-//empties the array and deletes the content of the table
+//deletes all tickets and ensures the table is updated
 function deleteTickets() {
 
     $.get("/deleteTickets", function () {

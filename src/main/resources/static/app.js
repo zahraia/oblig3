@@ -1,16 +1,17 @@
-
-$(function (){
+// ready-function ensures all movies are displayed before the user can buy a ticket
+$(function () {
     saveMovies();
 });
 
-function formatMovies(movie){
+//function that formats movies
+function formatMovies(movie) {
 
     let defaultValue = "Choose movie";
 
-    let out = "<select id = 'selectedMovie' onchange='validateMovie(this.value)'>";
+    let out = "<select id = 'selectedMovie' class='form-control' onchange='validateMovie(this)'>";
     out += "<option value ='default'>" + defaultValue + "</option>";
 
-    for (const i of movie){
+    for (const i of movie) {
         out += "<option>" + i.movie + "</option>";
     }
 
@@ -20,187 +21,172 @@ function formatMovies(movie){
 
 }
 
-function saveMovies(){
-    $.get("/retrieveMovies", function (movie){
+//function that calls for info from Controller and calls another function to format the movies
+function saveMovies() {
+    $.get("/retrieveMovies", function (movie) {
         formatMovies(movie);
     });
 }
 
-// creates an empty array to put all orders in and fetches the table to put them in
-
-const all_tickets = document.getElementById("tickets");
 
 //validates email using regex
-function validateEmail(email){
+function validateEmail(email) {
     let alert = $("#err_email");
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (email === "" ){
+    if (email === "") {
         alert.text("Please enter your email.");
         return false;
-    }
-    else if(!pattern.test(email)){
+    } else if (!pattern.test(email)) {
         alert.text("Please enter a valid email.")
         return false;
-    }
-    else{
+    } else {
         alert.text("");
         return true;
     }
 
 }
 
-function validatePhone(phone){
+function validatePhone(phone) {
     let alert = $("#err_phone");
     const pattern = /^\d{8}$/;
 
-    if (phone === "" ){
+    if (phone === "") {
         alert.text("Please enter your phone number.");
         return false;
-    }
-    else if(!pattern.test(phone)){
+    } else if (!pattern.test(phone)) {
         alert.text("Please enter a valid phone number.")
         return false;
-    }
-
-    else{
+    } else {
         alert.text("");
         return true;
     }
 
 }
 
-function validateMovie(input){
+function validateMovie(input) {
     let alert = $("#err_movie");
+    let selectedValue = $("#selectedMovie").val();
+    console.log(selectedValue);
 
-    if (input === "" || input === "Choose movie"){
+    if (selectedValue === "" || selectedValue === "default" || selectedValue === "Choose movie") {
 
         alert.text("Please choose a movie")
         return false;
 
-    }
-    else{
+    } else {
         alert.text("");
         return true;
     }
 
 }
 
-function validateFirstName(input){
+function validateFirstName(input) {
     let alert = $("#err_first_name");
 
-    if (input === "" ){
+    if (input === "") {
 
         alert.text("Please insert your first name.")
         return false;
 
-    }
-    else{
+    } else {
         alert.text("");
         return true;
     }
 
 }
 
-function validateLastName(input){
+function validateLastName(input) {
     let alert = $("#err_surname");
 
-    if (input === "" ){
+    if (input === "") {
 
         alert.text("Please insert your last name.")
         return false;
 
-    }
-    else{
+    } else {
         alert.text("");
         return true;
     }
 
 }
 
-function validateAmount(input){
+
+function validateAmount(input) {
     let alert = $("#err_amount");
 
-    if (input === "" || input<1 || isNaN(input) ){
+    if (input === "" || input < 1 || isNaN(input)) {
 
         alert.text("Please insert a valid amount.")
         return false;
 
-    }
-    else{
+    } else {
         alert.text("");
         return true;
     }
 
 }
 
-//buys ticket by getting values and checking if email and phone is validated
-function buyTicket(){
+function validateAll() {
+    const movieCheck = validateMovie($("#selectedMovie").val());
+    const firstNameCheck = validateFirstName($("#first_name").val());
+    const surnameCheck = validateLastName($("#surname").val());
+    const amountCheck = validateAmount($("#amount").val());
+    const phoneCheck = validatePhone($("#phone").val());
+    const emailCheck = validateEmail($("#email").val());
 
-    const alert_phone = document.getElementById("err_phone");
-
-    const alert_email = document.getElementById("err_email");
-    const alert_first_name = document.getElementById("err_first_name");
-    const alert_surname = document.getElementById("err_surname");
-    const alert_amount = document.getElementById("err_amount");
-    const alert_movie = document.getElementById("err_movie");
-
-
-    const first_name = document.getElementById("first_name").value;
-    const surname = document.getElementById("surname").value;
-    const movie = document.getElementById("selectedMovie").value;
-    const amount = document.getElementById("amount").value;
-    const phone = document.getElementById("phone").value;
-    const email = document.getElementById("email").value;
-
-    alert_email.textContent = "";
-    alert_phone.textContent = "";
-    alert_surname.textContent = "";
-    alert_first_name.textContent = "";
-    alert_amount.textContent = "";
-    alert_movie.textContent = "";
-
-
-    if (validateEmail(email) && validatePhone(phone) && validateMovie(movie) &&validateFirstName(first_name) && validateLastName(surname) && validateAmount(amount)){
-            const newOrder = {
-                movie: movie,
-                amount: amount,
-                first_name: first_name,
-                surname: surname,
-                phone: phone,
-                email: email
-
-            };
-            $.post("/saveTicket", newOrder, function (tickets ){
-
-            fetchTickets();
-
-        });
-
-
-        first_name.value = "";
-        surname.value = "";
-        movie.value = "";
-        phone.value = "";
-        email.value = "";
-        amount.value = 1;
-
-
+    if (movieCheck && firstNameCheck && surnameCheck && amountCheck && phoneCheck && emailCheck) {
+        buyTicket();
     }
+}
+
+const ticketsDisplay = $("#tickets");
+
+//buys ticket by getting values and checking if all input is validated
+function buyTicket() {
 
 
+    const first_name = $("#first_name").val();
+    const surname = $("#surname").val();
+    const movie = $("#selectedMovie").val();
+    const amount = $("#amount").val();
+    const phone = $("#phone").val();
+    const email = $("#email").val();
+
+    const newOrder = {
+        movie: movie,
+        amount: amount,
+        first_name: first_name,
+        surname: surname,
+        phone: phone,
+        email: email
+
+    };
+    $.post("/saveTicket", newOrder, function (tickets) {
+
+        fetchTickets(tickets);
+        $("#first_name").val("");
+        $("#surname").val("");
+        $("#selectedMovie").val("");
+        $("#amount").val("");
+        $("#phone").val("");
+        $("#email").val("");
+
+    });
 
 
 }
+
 function fetchTickets() {
     $.get("/fetchTickets", function (tickets) {
         showList(tickets);
     });
 }
-//creates a table head and shows the array
-function showList(tickets){
 
-    all_tickets.innerHTML = "";
+//creates a table head and shows the array
+function showList(tickets) {
+
+    ticketsDisplay.html("");
 
     let out = "<tr>" +
         "<th>" + "Movie" + "</th>" +
@@ -212,18 +198,18 @@ function showList(tickets){
         "</tr>";
 
     for (let i of tickets) {
-        out += "<tr>" + "<td>" + i.movie + "</td>" + "<td>" + i.amount +  "</td>" + "<td>" + i.first_name +
-            "</td>" + "<td>" + i.surname + "</td>" + "<td>" + i.phone + "</td>" + "<td>" + i.email +" </td>"+ "</tr>";
+        out += "<tr>" + "<td>" + i.movie + "</td>" + "<td>" + i.amount + "</td>" + "<td>" + i.first_name +
+            "</td>" + "<td>" + i.surname + "</td>" + "<td>" + i.phone + "</td>" + "<td>" + i.email + " </td>" + "</tr>";
 
     }
 
-    all_tickets.innerHTML += out;
+    ticketsDisplay.append(out);
 }
 
 //empties the array and deletes the content of the table
 function deleteTickets() {
 
-    $.get("/deleteTickets", function (){
+    $.get("/deleteTickets", function () {
         fetchTickets();
     });
 

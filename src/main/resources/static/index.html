@@ -3,97 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <title>Cinema tickets</title>
 
-    <style>
-        label {
-            margin-right: 5%;
-            margin-bottom: 3%;
-        }
-
-        input {
-            width: 20%;
-            position: relative;
-            right: 0;
-            margin-bottom: 1%;
-
-        }
-
-        select {
-            width: 25%;
-            margin-bottom: 1%;
-        }
-
-        p {
-            display: inline-block;
-            position: relative;
-            left: 30%;
-            color: red;
-            font-weight: bold;
-            padding: 0;
-            margin: 0;
-
-        }
-
-        form {
-            width: 50%;
-        }
-
-    </style>
 </head>
 <body>
+<div class="container mx-auto">
+    <h1> Order movie tickets</h1>
 
-<h1> Order movie tickets</h1>
+    <div class="row">
 
+        <div class="col-md-8">
 
-<label for="movies">Choose your movie:</label>
-<p id="err_movie"></p>
-<div id="movies"></div>
-<br>
+            <div class="form-group">
+                <label for="movies">Choose your movie:</label>
+                <div id="movies"></div>
+                <p class="text-danger" id="err_movie"></p>
 
-<label for="amount">Amount</label>
-<input type="number" id="amount" min="0" value="1" onchange="validateAmount(this.value)">
-<p id="err_amount"></p>
+            </div>
+            <br>
 
-<br>
+            <div class="form-group">
+                <label for="amount">Amount</label>
+                <input type="number" class="form-control" id="amount" min="0" value="1"
+                       onchange="validateAmount(this.value)">
+                <p class="text-danger" id="err_amount"></p>
 
-<label for="first_name">First name: </label>
-<input type="text" id="first_name" onchange="validateFirstName(this.value)">
-<p id="err_first_name"></p>
+            </div>
+            <br>
 
-<br>
+            <div class="form-group">
 
-<label for="surname">surname: </label>
-<input type="text" id="surname" onchange="validateLastName(this.value)">
-<p id="err_surname"></p>
+                <label for="first_name">First name: </label>
+                <input type="text" id="first_name" class="form-control" onchange="validateFirstName(this.value)">
+                <p class="text-danger" id="err_first_name"></p>
+            </div>
 
+            <br>
 
-<br>
+            <div class="form-group">
+                <label for="surname">Surname: </label>
+                <input type="text" class="form-control" id="surname" onchange="validateLastName(this.value)">
+                <p class="text-danger" id="err_surname"></p>
 
-<label for="phone">Phone number: </label>
-<input type="text" id="phone" onchange="validatePhone(this.value)">
-<p id="err_phone"></p>
-
-<br>
-
-<label for="email">Email: </label>
-<input type="email" id="email" onchange="validateEmail(this.value)">
-<p id="err_email"></p>
-
-<br>
-<button onclick="buyTicket()"> Buy ticket</button>
-
-
-<h2>
-    All tickets
-</h2>
-
-<table id="tickets">
-
-</table>
+            </div>
 
 
-<button onclick="deleteTickets()">Delete all tickets</button>
+            <br>
+
+            <div class="form-group">
+
+                <label for="phone">Phone number: </label>
+                <input type="text" class="form-control" id="phone" onchange="validatePhone(this.value)">
+                <p class="text-danger" id="err_phone"></p>
+
+            </div>
+            <br>
+
+            <div class="form-group">
+
+                <label for="email">Email: </label>
+                <input type="email" class="form-control" id="email" onchange="validateEmail(this.value)">
+                <p class="text-danger" id="err_email"></p>
+
+            </div>
+            <br>
+            <button class="btn btn-primary" onclick="validateAll()"> Buy ticket</button>
+        </div>
+
+    </div>
+    <div class="row">
+        <h2>
+            All tickets
+        </h2>
+
+        <table id="tickets">
+
+        </table>
+    </div>
+
+
+    <button class="btn btn-danger" onclick="deleteTickets()">Delete all tickets</button>
+</div>
 
 
 </body>

@@ -8,7 +8,8 @@ public class Movies {
         this.movie = movie;
     }
 
-    public Movies(){}
+    public Movies() {
+    }
 
     public String getMovie() {
         return movie;

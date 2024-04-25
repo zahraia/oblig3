@@ -9,10 +9,12 @@ public class Tickets {
     private String movie;
     private String amount;
 
+    private int id;
 
 
-    public Tickets(String first_name, String surname, String phone, String email, String movie, String amount){
+    public Tickets(String first_name, String surname, String phone, String email, String movie, String amount, int id) {
         this.movie = movie;
+        this.id = id;
         this.amount = amount;
         this.first_name = first_name;
         this.surname = surname;
@@ -21,7 +23,8 @@ public class Tickets {
 
     }
 
-    public Tickets(){}
+    public Tickets() {
+    }
 
     public String getFirst_name() {
         return first_name;
@@ -69,5 +72,13 @@ public class Tickets {
 
     public void setAmount(String number) {
         this.amount = number;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

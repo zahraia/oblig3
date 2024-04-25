@@ -11,26 +11,26 @@ import java.util.List;
 public class Controller {
 
     @Autowired
-     CinemaRep rep;
+    CinemaRep rep;
 
     @PostMapping("/saveTicket")
-    public void saveTicket(Tickets ticket){
+    public void saveTicket(Tickets ticket) {
         rep.saveTicket(ticket);
     }
 
     @GetMapping("/fetchTickets")
-        public List<Tickets> fetchTickets(){
-            return rep.fetchTickets();
-        }
+    public List<Tickets> fetchTickets() {
+        return rep.fetchTickets();
+    }
 
 
     @GetMapping("/retrieveMovies")
-    public List<Movies> retrieveMovies(){
+    public List<Movies> retrieveMovies() {
         return rep.retrieveMovie();
     }
 
     @GetMapping("/deleteTickets")
-    public void deleteTickets(){
+    public void deleteTickets() {
         rep.deleteTickets();
     }
 
